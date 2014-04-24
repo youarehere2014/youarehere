@@ -1,0 +1,11 @@
+{
+  "name": "tribecahack2014",
+  "description": "Tribeca Hacks Mobile 2014 - Team 2",
+  "version": "0.0.1",
+  "private": true,
+  "dependencies": {
+    "express": "4.x",
+    "socket.io": "0.9.x",
+    "jquery": ">=2.1.x"
+  }
+}

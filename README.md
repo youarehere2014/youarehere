@@ -1,2 +1,1 @@
-hack-director
-=============
+# Tribeca Hacks Mobile 2014 - Team 2
