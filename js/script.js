@@ -318,8 +318,7 @@
 			console.log('unable to get location');
 		}, {
 			enableHighAccuracy: true,
-			maximumAge: 30000,
-			timeout: 27000
+			maximumAge: 30000
 		});
 
 		window.addEventListener("deviceorientation", function (e) {
@@ -336,10 +335,10 @@
 			if (window.orientation) {
 				if (window.orientation < 0) {
 					tilt = -e.gamma;
-					rot = fmod(e.alpha + 180, 360);
+					rot = fmod(e.alpha + 180 + 90, 360);
 				} else {
 					tilt = e.gamma;
-					rot = e.alpha;
+					rot = fmod(e.alpha + 90, 360);
 				}
 			} else {
 				tilt = e.beta;
