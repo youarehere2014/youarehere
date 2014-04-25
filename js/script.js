@@ -360,14 +360,12 @@
 		}, false);
 
 		window.addEventListener('mousedown', function (evt) {
-			console.log('mousedown');
 			dragging = true;
 			panStartX = evt.pageX;
 			panStartY = evt.pageY;
 		}, true);
 
 		window.addEventListener('mousemove', function (evt) {
-			console.log('mousemove');
 			if (dragging) {
 				panSpeedX = (evt.pageX - panStartX) / 4000;
 				panSpeedY = (panStartY - evt.pageY) / 4000;
@@ -375,7 +373,6 @@
 		}, true);
 
 		window.addEventListener('mouseup', function (evt) {
-			console.log('mouseup');
 			dragging = false;
 			lastPanUpdate = 0;
 		}, true);
