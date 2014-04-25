@@ -696,7 +696,7 @@
 
 			current = true;
 			started = true;
-			updateAnimations.call(me, 0);
+
 			if (typeof startFn === 'function') {
 				startFn.call(me, event, options);
 			}
@@ -707,6 +707,7 @@
 					logError(e);
 				}
 			}
+			updateAnimations.call(me, 0);
 
 			//run frame once in case Popcorn doesn't
 			definition.frame(event, options, popcorn.currentTime());

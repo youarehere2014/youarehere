@@ -1,7 +1,7 @@
 (function () {
 	//constants
 	var innerDistance = 3,
-		outerDistance = 40,
+		outerDistance = 20,
 
 	//browser stuff and elements
 		devicePixelRatio = window.devicePixelRatio || 1,
@@ -38,15 +38,15 @@
 					ogg: 'audio/alice1a.ogg'
 				},
 				latitude: 40.736416,
-				longitude: -74.005542,
+				longitude: -74.005542/*,
 				overlays: {
 					tardyHare: {
-						x: 0,
-						y: 0,
-						scale: 0.5,
+						x: -1188,
+						y: -20.5,
+						scale: 1.836,
 						//events: 
 						start: 4,
-						end: 20
+						end: 2000
 					},
 					cathead: {
 						x: 694,
@@ -59,19 +59,36 @@
 						y: 204.5,
 						start: 6,
 						end: 6
+					},
+					queen: {
+						x: -1739,
+						y: 235,
+						scale: 4.168
 					}
 				}
+				*/
 			},
 
-			//work space
+			//work space garden
 			{
 				panoramaSrc: '#panorama1',
 				sources: {
-					mp3: 'audio/creep.mp3',
-					ogg: 'audio/creep.ogg'
+					mp3: 'audio/coraline.mp3',
+					ogg: 'audio/coraline.ogg'
 				},
-				latitude: 40.735758,
-				longitude: -74.007999
+				latitude: 40.736018,
+				longitude: -74.007881
+			},
+
+			//work space front
+			{
+				panoramaSrc: '#panorama2',
+				sources: {
+					mp3: 'audio/coraline.mp3',
+					ogg: 'audio/coraline.ogg'
+				},
+				latitude: 40.735843,
+				longitude: -74.008680
 			}
 		];
 
@@ -85,7 +102,9 @@
 			audio,
 			overlay,
 			layerCount = 1,
-			i = 0;
+			i = 0,
+			event,
+			opacityProps;
 
 		scene.id = sceneId;
 		sceneId++;
@@ -119,6 +138,14 @@
 
 		audio.src = scene.src;
 
+		//set up popcorn
+		/*
+		scene.popcorn = Popcorn(audio);
+		scene.popcorn.defaults('seriously', {
+			seriously: seriously
+		});
+		*/
+
 		//set up seriously
 		if (scene.overlays) {
 			layerCount = Object.keys(scene.overlays).length + 1;
@@ -134,21 +161,31 @@
 				overlay = scene.overlays[key];
 				overlay.transform = seriously.transform('2d');
 				overlay.transform.source = document.getElementById(key);
-				//overlay.x = overlay.x - 0.5;
-				//overlay.y = overlay.y - 0.5;
 				overlay.transform.translate(overlay.x, overlay.y);
 				overlay.transform.scale(overlay.scale || 1);
 				scene.layers['source' + i] = overlay.transform;
+				//scene.layers['opacity' + i] = 0;
+
+				//fudge end factor
+				event = {
+					start: overlay.start,
+					end: overlay.end || 500
+				};
+				opacityProps = {
+					from: 0
+				};
+				opacityProps[1 / (event.end - event.start)] = 1;
+				event[scene.id + '-opacity' + i] = opacityProps;
+				scene.layers.alias('opacity' + i, scene.id + '-opacity' + i);
+				//scene.popcorn.seriously(event);
 			}
 		}
 
 		scene.panorama = seriously.effect('panorama');
 		scene.panorama.source = scene.layers;
+		scene.panorama.fov = 120;
 
 		select['source' + scene.id] = scene.panorama;
-
-		//set up popcorn
-		scene.popcorn = Popcorn(audio);
 	}
 
 	function deactivateScene(scene) {
@@ -318,7 +355,8 @@
 			console.log('unable to get location');
 		}, {
 			enableHighAccuracy: true,
-			maximumAge: 30000
+			maximumAge: 30000,
+			timeout: 27000
 		});
 
 		window.addEventListener("deviceorientation", function (e) {
