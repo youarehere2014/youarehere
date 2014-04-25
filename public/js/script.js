@@ -22,15 +22,15 @@
 		longitude,
 		startTime,
 		scenes = [
-			//work space
+			//washington and charles st.
 			{
 				panoramaSrc: '#panorama0',
 				sources: {
-					mp3: 'audio/myst.mp3',
-					ogg: 'audio/myst.ogg'
+					mp3: 'audio/alice1a.mp3',
+					ogg: 'audio/alice1a.ogg'
 				},
-				latitude: 40.735758,
-				longitude: -74.007999,
+				latitude: 40.736416,
+				longitude: -74.005542,
 				overlays: {
 					tardyHare: {
 						x: 0,
@@ -40,15 +40,15 @@
 				}
 			},
 
-			//washington and charles st.
+			//work space
 			{
 				panoramaSrc: '#panorama1',
 				sources: {
 					mp3: 'audio/creep.mp3',
 					ogg: 'audio/creep.ogg'
 				},
-				latitude: 40.736416,
-				longitude: -74.005542
+				latitude: 40.735758,
+				longitude: -74.007999
 			}
 		];
 
