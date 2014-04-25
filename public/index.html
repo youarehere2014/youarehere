@@ -1,14 +1,40 @@
 <html>
 	<head>
 		<title></title>
+		<style type="text/css">
+
+		body {
+			margin: 0;
+		}
+
+		#canvas {
+			width: 100%;
+			height: 100%;
+		}
+
+		#assets {
+			display: none;
+		}
+
+		</style>
 	</head>
 	<body>
-		<div id="scene1"></div>
-		<div id="scene2"></div>
-		<div id="scene3"></div>
-		<script type="text/javascript" src="js/popcorn.js"></script>
-		<script type="text/javascript" src="js/popcorn-base.js"></script>
-		<script type="text/javascript" src="js/popcorn.style.js"></script>
+		<canvas id="canvas"></canvas>
+		<div id="assets">
+			<img id="panorama0" src="images/panorama.jpg"/>
+			<img id="panorama1" src="images/panorama2.jpg"/>
+			<img id="tardyHare" src="images/tardyHare.png"/>
+		</div>
+		<script type="text/javascript" src="js/lib/popcorn.js"></script>
+		<script type="text/javascript" src="js/lib/popcorn-base.js"></script>
+		<script type="text/javascript" src="js/lib/popcorn.style.js"></script>
+
+		<script type="text/javascript" src="js/lib/seriously.js"></script>
+		<script type="text/javascript" src="js/lib/seriously.panorama.js"></script>
+		<script type="text/javascript" src="js/lib/seriously.layers.js"></script>
+		<script type="text/javascript" src="js/lib/seriously.blend.js"></script>
+		<script type="text/javascript" src="js/lib/seriously.select.js"></script>
+
 		<script type="text/javascript" src="js/script.js"></script>
 	</body>
 </html>
