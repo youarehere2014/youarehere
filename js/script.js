@@ -5,12 +5,12 @@
 
 	//browser stuff and elements
 		devicePixelRatio = window.devicePixelRatio || 1,
-		//audioElement,
+		splash = document.getElementById('splash'),
+		canvas = document.getElementById('canvas'),
 
 	//main objets
 		seriously,
 		select,
-		canvas,
 		target,
 
 	//state
@@ -254,8 +254,25 @@
 		}
 	}
 
+	function fullscreen() {
+		if (canvas.requestFullscreen) {
+			canvas.requestFullscreen();
+		} else if (canvas.msRequestFullscreen) {
+			canvas.msRequestFullscreen();
+		} else if (canvas.mozRequestFullScreen) {
+			canvas.mozRequestFullScreen();
+		} else if (canvas.webkitRequestFullscreen) {
+			canvas.webkitRequestFullscreen();
+		}
+	}
+
 	function initialize() {
 		var i;
+
+		//only initialize once
+		if (seriously) {
+			return;
+		}
 
 		//set up canvas and composition
 		seriously = new Seriously();
@@ -363,27 +380,16 @@
 			dragging = false;
 			lastPanUpdate = 0;
 		}, true);
+
+		splash.style.display = 'none';
+		canvas.style.display = 'inline-block';
+
+		//request full screen only on mobile
+		if (/Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent)) {
+			fullscreen();
+		}
 	}
 
-	document.getElementById('splash').addEventListener('click', function () {
-		canvas = document.getElementById('canvas');
-
-		/*
-		if (canvas.requestFullscreen) {
-			canvas.requestFullscreen();
-		} else if (canvas.msRequestFullscreen) {
-			canvas.msRequestFullscreen();
-		} else if (canvas.mozRequestFullScreen) {
-			canvas.mozRequestFullScreen();
-		} else if (canvas.webkitRequestFullscreen) {
-			canvas.webkitRequestFullscreen();
-		}
-		*/
-
-		this.style.display = 'none';
-		canvas.style.display = 'inline-block';
-		initialize();
-	}, false);
-
-	//initialize();
+	splash.addEventListener('click', initialize, false);
+	splash.addEventListener('touchend', initialize, false);
 }());
