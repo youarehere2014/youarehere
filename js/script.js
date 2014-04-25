@@ -36,6 +36,14 @@
 						x: 0,
 						y: 0,
 						scale: 0.5
+					},
+					cathead: {
+						x: 694,
+						y: 484
+					},
+					catbody: {
+						x: 751.5,
+						y: 204.5
 					}
 				}
 			},
@@ -70,7 +78,7 @@
 		//set up audio
 
 		audio = document.createElement('audio');
-		audio.addEventListener('canplay', function () {
+		audio.addEventListener('loadedmetadata', function () {
 			if (activeScene && activeScene.audio === this) {
 				if (pendingCurrentTime >= 0 && pendingCurrentTime < audio.duration) {
 					audio.currentTime = pendingCurrentTime;
@@ -79,6 +87,10 @@
 			}
 		});
 		scene.audio = audio;
+
+		//temp
+		//document.getElementById('controls').appendChild(audio);
+		//audio.controls = true;
 
 		for (key in scene.sources) {
 			if (scene.sources.hasOwnProperty(key)) {
@@ -89,6 +101,8 @@
 				}
 			}
 		}
+
+		audio.src = scene.src;
 
 		//set up seriously
 		if (scene.overlays) {
@@ -123,11 +137,35 @@
 	}
 
 	function deactivateScene(scene) {
-		//scene.comp.seriously.stop();
+		scene.audio.pause();
 	}
 
 	function activateScene(scene) {
-		select.active = scene.id;
+		var audioElement,
+			currentTime;
+
+		if (scene !== activeScene) {
+			if (activeScene) {
+				//break down old scene
+				deactivateScene(activeScene);
+				//set up new scene
+				currentTime = activeScene.audio.currentTime;
+			} else {
+				currentTime = 0;
+			}
+
+			activeScene = scene;
+			audioElement = activeScene.audio;
+
+			//set new current time if/when metadata is loaded
+			if (audioElement.readyState >= 1 && currentTime < audioElement.duration) {
+				audioElement.currentTime = currentTime;
+			} else {
+				pendingCurrentTime = currentTime;
+			}
+
+			select.active = scene.id;
+		}
 	}
 
 	function resize() {
@@ -173,7 +211,6 @@
 			scene,
 			closestScene,
 			minDist = Infinity,
-			currentTime,
 			i;
 
 		latitude = position.coords.latitude;
@@ -190,39 +227,15 @@
 			}
 		}
 
-		if (closestScene !== activeScene) {
-			if (activeScene) {
-				//break down old scene
-				deactivateScene(activeScene);
-			}
-
-			//set up new scene
-			/*
-			currentTime = audioElement.currentTime;
-			audioElement.src = closestScene.src;
-			audioElement.load();
-			*/
-
-			activeScene = closestScene;
-			//set new current time if/when metadata is loaded
-			/*
-			if (audioElement.readyState >= 3 && pendingCurrentTime < audioElement.duration) {
-				audioElement.currentTime = currentTime;
-			} else {
-				pendingCurrentTime = currentTime;
-			}
-			*/
-
-			activateScene(activeScene);
-		}
+		activateScene(closestScene);
 
 		//fade out as you walk away
 		//won't do anything in iPad
 		if (minDist < outerDistance) {
-			//audioElement.play();
-			//audioElement.volume = 1 - Math.max(0, Math.min(1, (minDist - innerDistance) / (outerDistance - innerDistance)));
+			activeScene.audio.play();
+			activeScene.audio.volume = 1 - Math.max(0, Math.min(1, (minDist - innerDistance) / (outerDistance - innerDistance)));
 		} else {
-			//audioElement.pause();
+			activeScene.audio.pause();
 		}
 	}
 
@@ -243,6 +256,7 @@
 		}
 
 		activateScene(scenes[0]);
+		scenes[0].audio.play();
 		resize();
 		seriously.go(function () {
 			var i;
@@ -250,6 +264,9 @@
 				for (i = 0; i < scenes.length; i++) {
 					panorama = scenes[i].panorama;
 					panorama.yaw = (Date.now() / 100) % 360;
+
+					//panorama.yaw = 55;
+					panorama.pitch = 20;
 					//panorama.pitch = Math.sin(Date.now() / 2000) * 10;
 				}
 			}
