@@ -15,6 +15,14 @@
 
 	//state
 		sceneId = 0,
+		panStartX,
+		panStartY,
+		panSpeedX,
+		panSpeedY,
+		panX,
+		panY,
+		lastPanUpdate = 0,
+		dragging = false,
 		animateOrientation = true,
 		pendingCurrentTime = -1,
 		activeScene,
@@ -35,15 +43,22 @@
 					tardyHare: {
 						x: 0,
 						y: 0,
-						scale: 0.5
+						scale: 0.5,
+						//events: 
+						start: 4,
+						end: 20
 					},
 					cathead: {
 						x: 694,
-						y: 484
+						y: 484,
+						start: 8,
+						end: 15
 					},
 					catbody: {
 						x: 751.5,
-						y: 204.5
+						y: 204.5,
+						start: 6,
+						end: 6
 					}
 				}
 			},
@@ -247,8 +262,7 @@
 
 		select = seriously.effect('select', scenes.length);
 
-		//canvas = document.createElement('canvas');
-		target = seriously.target('#canvas');
+		target = seriously.target(canvas);
 		target.source = select;
 
 		for (i = 0; i < scenes.length; i++) {
@@ -259,15 +273,23 @@
 		scenes[0].audio.play();
 		resize();
 		seriously.go(function () {
-			var i;
-			if (animateOrientation) {
+			var i,
+				diff;
+
+			if (dragging) {
+				if (lastPanUpdate) {
+					diff = Date.now() - lastPanUpdate;
+					for (i = 0; i < scenes.length; i++) {
+						panorama = scenes[i].panorama;
+						panorama.yaw = fmod(panorama.yaw + diff * panSpeedX, 360);
+						panorama.pitch += diff * panSpeedY;
+					}
+				}
+				lastPanUpdate = Date.now();
+			} else if (animateOrientation && false) {
 				for (i = 0; i < scenes.length; i++) {
 					panorama = scenes[i].panorama;
 					panorama.yaw = (Date.now() / 100) % 360;
-
-					//panorama.yaw = 55;
-					panorama.pitch = 20;
-					//panorama.pitch = Math.sin(Date.now() / 2000) * 10;
 				}
 			}
 		});
@@ -289,6 +311,10 @@
 				//yaw,
 				i,
 				panorama;
+
+			if (dragging) {
+				return;
+			}
 
 			if (window.orientation) {
 				if (window.orientation < 0) {
@@ -316,7 +342,48 @@
 			//todo: hide map ui
 			animateOrientation = false;
 		}, false);
+
+		window.addEventListener('mousedown', function (evt) {
+			console.log('mousedown');
+			dragging = true;
+			panStartX = evt.pageX;
+			panStartY = evt.pageY;
+		}, true);
+
+		window.addEventListener('mousemove', function (evt) {
+			console.log('mousemove');
+			if (dragging) {
+				panSpeedX = (evt.pageX - panStartX) / 4000;
+				panSpeedY = (panStartY - evt.pageY) / 4000;
+			}
+		}, true);
+
+		window.addEventListener('mouseup', function (evt) {
+			console.log('mouseup');
+			dragging = false;
+			lastPanUpdate = 0;
+		}, true);
 	}
 
-	initialize();
+	document.getElementById('splash').addEventListener('click', function () {
+		canvas = document.getElementById('canvas');
+
+		/*
+		if (canvas.requestFullscreen) {
+			canvas.requestFullscreen();
+		} else if (canvas.msRequestFullscreen) {
+			canvas.msRequestFullscreen();
+		} else if (canvas.mozRequestFullScreen) {
+			canvas.mozRequestFullScreen();
+		} else if (canvas.webkitRequestFullscreen) {
+			canvas.webkitRequestFullscreen();
+		}
+		*/
+
+		this.style.display = 'none';
+		canvas.style.display = 'inline-block';
+		initialize();
+	}, false);
+
+	//initialize();
 }());

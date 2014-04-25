@@ -6,11 +6,15 @@
 
 		body {
 			margin: 0;
+			background-color: black;
+			text-align: center;
 		}
 
 		#canvas {
 			width: 100%;
 			height: 100%;
+			display: none;
+			cursor: pointer;
 		}
 
 		#assets {
@@ -26,10 +30,17 @@
 			display: none;
 		}
 
+		#splash {
+			height: 100%;
+			margin: 0 auto;
+			cursor: pointer;
+		}
+
 		</style>
 	</head>
 	<body>
 		<canvas id="canvas"></canvas>
+		<img id="splash" src="images/splash.jpg"/>
 		<div id="assets">
 			<img id="panorama0" src="images/panorama.jpg"/>
 			<img id="panorama1" src="images/panorama2.jpg"/>
@@ -48,6 +59,7 @@
 		<script type="text/javascript" src="js/lib/seriously.blend.js"></script>
 		<script type="text/javascript" src="js/lib/seriously.select.js"></script>
 
+		<script type="text/javascript" src="js/popcorn.seriously.js"></script>
 		<script type="text/javascript" src="js/script.js"></script>
 	</body>
 </html>
