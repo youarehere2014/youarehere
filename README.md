@@ -44,7 +44,7 @@ Works pretty well, but geolocation services can be a bit unpredictable. Audio ma
 
 ### Firefox (Android and Desktop)
 
-Panorama display works great, but audio won't play since we only included mp3 files. Device orientation might be a bit off, since the API is somewhat immature and may behave slightly differently from Chrome.
+Firefox also works pretty well. Device orientation might be a bit off, since the API is somewhat immature and may behave slightly differently from Chrome. Audio may not play on certain operating systems, since we only included mp3.
 
 ### Internet Explorer
 
