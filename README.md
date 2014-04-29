@@ -6,6 +6,8 @@ This is a prototype of an interactive story designed and built as part of [Tribe
 
 All planning, story, code and art were created in two days. Expect it to break.
 
+[View Prototype](http://youarehere2014.github.io/youarehere/)
+
 ## Locations
 
 You can visit the three locations in the West Village of Manhattan in New York City (though one of them is behind a locked door in the back yard of a private office building, so good luck with that). As an alternative, the Chrome Developer Tools will you allow you to [override geolocation](https://developers.google.com/chrome-developer-tools/docs/mobile-emulation#device-geolocation-overrides).
